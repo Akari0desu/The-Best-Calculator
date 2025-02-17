@@ -1,3 +1,11 @@
+#!/usr/bin/env python3
+# -*- coding: utf-8 -*-
+"""
+Created on Mon Feb 17 10:26:43 2025
+
+@author: jaspersdocument
+"""
+
 import tkinter as tk
 from tkinter import messagebox
 from calculator import Calculator  # Import calculation logic module
@@ -5,7 +13,7 @@ from calculator import Calculator  # Import calculation logic module
 # Define UI colors and styles
 BG_COLOR = "#222831"  # Background color (dark)
 DISPLAY_COLOR = "#393E46"  # Display area background
-BTN_COLOR = "#000000"  # Button color (black)
+BTN_COLOR = "#FFFFFF"  # Button color (black)
 BTN_TEXT_COLOR = "#000000"  # Button text color (black)
 BTN_HIGHLIGHT = "#00ADB5"  # Button highlight color (cyan)
 FONT_LARGE = ("Arial", 22, "bold")  # Font for display
@@ -26,7 +34,7 @@ class CalculatorGUI:
             justify="right", bd=10, relief=tk.FLAT
         )
         self.display.grid(row=0, column=0, columnspan=4, ipadx=8, ipady=15, padx=10, pady=20, sticky="ew")
-        self.display.bind("<Key>", self.key_press)  # Enable keyboard input
+        self.display.bind("<KeyPress>", self.key_press)  # Enable keyboard input
         self.display.focus_set()
 
         # Button layout
@@ -67,27 +75,11 @@ class CalculatorGUI:
         elif button_text == "DEL":
             self.expression = self.expression[:-1]
         elif button_text == "sqrt":
-            self.expression += "**0.5"
+            self.expression += "math.sqrt("
         elif button_text == "^":
             self.expression += "**"
         elif button_text in ["sin", "cos", "tan", "arcsin", "arccos", "arctan"]:
-            # Ensure a valid input before applying trigonometric functions
-            try:
-                value = float(self.expression)  # Convert current display input to number
-                if button_text == "sin":
-                    self.expression = str(Calculator.sine(value))
-                elif button_text == "cos":
-                    self.expression = str(Calculator.cosine(value))
-                elif button_text == "tan":
-                    self.expression = str(Calculator.tangent(value))
-                elif button_text == "arcsin":
-                    self.expression = str(Calculator.arcsin(value))
-                elif button_text == "arccos":
-                    self.expression = str(Calculator.arccos(value))
-                elif button_text == "arctan":
-                    self.expression = str(Calculator.arctan(value))
-            except ValueError:
-                self.expression = "Error"
+            self.expression += f"Calculator.{button_text}("
         else:
             self.expression += button_text  # Append other numbers/symbols normally
 
