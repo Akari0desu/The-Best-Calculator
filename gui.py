@@ -1,27 +1,15 @@
-#!/usr/bin/env python3
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Feb 14 14:31:42 2025
-
-@author: jaspersdocument
-"""
-
-# -*- coding: utf-8 -*-
-"""
-GUI Module: Implements the calculator interface using Tkinter
-"""
-
 import tkinter as tk
 from tkinter import messagebox
-from calculator import Calculator  # Import the backend calculations
+from calculator import Calculator  # Import calculation logic module
 
-# Define colors and styles for the UI
-BG_COLOR = "#222831"
-FG_COLOR = "#EEEEEE"
-BTN_COLOR = "#393E46"
-BTN_HIGHLIGHT = "#00ADB5"
-FONT_LARGE = ("Arial", 20, "bold")
-FONT_MEDIUM = ("Arial", 14)
+# Define UI colors and styles
+BG_COLOR = "#222831"  # Background color (dark)
+DISPLAY_COLOR = "#393E46"  # Display area background
+BTN_COLOR = "#393E46"  # Button color (black)
+BTN_TEXT_COLOR = "#000000"  # Button text color (black)
+BTN_HIGHLIGHT = "#393E46"  # Button highlight color (cyan)
+FONT_LARGE = ("Arial", 22, "bold")  # Font for display
+FONT_MEDIUM = ("Arial", 18, "bold")  # Increased button font size
 
 class CalculatorGUI:
     def __init__(self, root):
@@ -33,12 +21,15 @@ class CalculatorGUI:
         self.expression = ""
         
         # Display area
-        self.display = tk.Entry(root, font=FONT_LARGE, bg=BG_COLOR, fg=FG_COLOR, justify="right", bd=10, relief=tk.FLAT)
+        self.display = tk.Entry(
+            root, font=FONT_LARGE, bg=DISPLAY_COLOR, fg=BTN_TEXT_COLOR, 
+            justify="right", bd=10, relief=tk.FLAT
+        )
         self.display.grid(row=0, column=0, columnspan=4, ipadx=8, ipady=15, padx=10, pady=20, sticky="ew")
         self.display.bind("<Key>", self.key_press)  # Enable keyboard input
         self.display.focus_set()
 
-        # Buttons layout
+        # Button layout
         button_layout = [
             ["7", "8", "9", "/"],
             ["4", "5", "6", "*"],
@@ -53,13 +44,15 @@ class CalculatorGUI:
         for row_idx, row in enumerate(button_layout, start=1):
             for col_idx, btn_text in enumerate(row):
                 button = tk.Button(
-                    root, text=btn_text, font=FONT_MEDIUM, bg=BTN_COLOR, fg=FG_COLOR,
-                    activebackground=BTN_HIGHLIGHT, relief=tk.RAISED, bd=3, padx=10, pady=10,
+                    root, text=btn_text, font=FONT_MEDIUM, 
+                    bg=BTN_COLOR, fg=BTN_TEXT_COLOR,  # Black button with white text
+                    activebackground=BTN_HIGHLIGHT, activeforeground=BTN_TEXT_COLOR,
+                    relief=tk.RAISED, bd=3, padx=10, pady=10,
                     command=lambda text=btn_text: self.on_button_click(text)
                 )
                 button.grid(row=row_idx, column=col_idx, sticky="nsew", padx=5, pady=5)
         
-        # Adjust row/column weights for responsiveness
+        # Make buttons and window size adaptive
         for i in range(8):
             root.grid_rowconfigure(i, weight=1)
         for i in range(4):
@@ -106,7 +99,7 @@ class CalculatorGUI:
         self.update_display()
 
     def update_display(self):
-        """Updates the display with the current expression"""
+        """Updates the display box"""
         self.display.delete(0, tk.END)
         self.display.insert(tk.END, self.expression)
 
@@ -115,6 +108,3 @@ def run_gui():
     root = tk.Tk()
     app = CalculatorGUI(root)
     root.mainloop()
-
-if __name__ == "__main__":
-    run_gui()
