@@ -5,11 +5,11 @@ from calculator import Calculator  # Import calculation logic module
 # Define UI colors and styles
 BG_COLOR = "#222831"  # Background color (dark)
 DISPLAY_COLOR = "#393E46"  # Display area background
-BTN_COLOR = "#393E46"  # Button color (black)
+BTN_COLOR = "#000000"  # Button color (black)
 BTN_TEXT_COLOR = "#000000"  # Button text color (black)
-BTN_HIGHLIGHT = "#393E46"  # Button highlight color (cyan)
+BTN_HIGHLIGHT = "#00ADB5"  # Button highlight color (cyan)
 FONT_LARGE = ("Arial", 22, "bold")  # Font for display
-FONT_MEDIUM = ("Arial", 18, "bold")  # Increased button font size
+FONT_MEDIUM = ("Arial", 18, "bold")  # Button font size
 
 class CalculatorGUI:
     def __init__(self, root):
@@ -71,10 +71,26 @@ class CalculatorGUI:
         elif button_text == "^":
             self.expression += "**"
         elif button_text in ["sin", "cos", "tan", "arcsin", "arccos", "arctan"]:
-            self.expression += f"Calculator.{button_text}("
+            # Ensure a valid input before applying trigonometric functions
+            try:
+                value = float(self.expression)  # Convert current display input to number
+                if button_text == "sin":
+                    self.expression = str(Calculator.sine(value))
+                elif button_text == "cos":
+                    self.expression = str(Calculator.cosine(value))
+                elif button_text == "tan":
+                    self.expression = str(Calculator.tangent(value))
+                elif button_text == "arcsin":
+                    self.expression = str(Calculator.arcsin(value))
+                elif button_text == "arccos":
+                    self.expression = str(Calculator.arccos(value))
+                elif button_text == "arctan":
+                    self.expression = str(Calculator.arctan(value))
+            except ValueError:
+                self.expression = "Error"
         else:
-            self.expression += button_text
-        
+            self.expression += button_text  # Append other numbers/symbols normally
+
         self.update_display()
 
     def key_press(self, event):
@@ -108,3 +124,6 @@ def run_gui():
     root = tk.Tk()
     app = CalculatorGUI(root)
     root.mainloop()
+
+if __name__ == "__main__":
+    run_gui()
