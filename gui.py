@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Created on Mon Feb 17 10:26:43 2025
+Created on Mon Feb 17 10:48:09 2025
 
 @author: jaspersdocument
 """
@@ -14,7 +14,7 @@ from calculator import Calculator  # Import calculation logic module
 BG_COLOR = "#222831"  # Background color (dark)
 DISPLAY_COLOR = "#393E46"  # Display area background
 BTN_COLOR = "#FFFFFF"  # Button color (black)
-BTN_TEXT_COLOR = "#000000"  # Button text color (black)
+BTN_TEXT_COLOR = "#000000"  # Button text color (white)
 BTN_HIGHLIGHT = "#00ADB5"  # Button highlight color (cyan)
 FONT_LARGE = ("Arial", 22, "bold")  # Font for display
 FONT_MEDIUM = ("Arial", 18, "bold")  # Button font size
@@ -33,9 +33,8 @@ class CalculatorGUI:
             root, font=FONT_LARGE, bg=DISPLAY_COLOR, fg=BTN_TEXT_COLOR, 
             justify="right", bd=10, relief=tk.FLAT
         )
-        self.display.grid(row=0, column=0, columnspan=4, ipadx=8, ipady=15, padx=10, pady=20, sticky="ew")
-        self.display.bind("<KeyPress>", self.key_press)  # Enable keyboard input
-        self.display.focus_set()
+        self.display.grid(row=0, column=0, columnspan=4, ipadx=8, ipady=10, padx=8, pady=15, sticky="ew")
+        self.display.insert(0, "Please use mouse only")
 
         # Button layout
         button_layout = [
@@ -79,26 +78,25 @@ class CalculatorGUI:
         elif button_text == "^":
             self.expression += "**"
         elif button_text in ["sin", "cos", "tan", "arcsin", "arccos", "arctan"]:
-            self.expression += f"Calculator.{button_text}("
+            trig_map = {
+                "sin": "sine",
+                "cos": "cosine",
+                "tan": "tangent",
+                "arcsin": "arcsin",
+                "arccos": "arccos",
+                "arctan": "arctan"
+            }
+            self.expression += f"Calculator.{trig_map[button_text]}("
         else:
             self.expression += button_text  # Append other numbers/symbols normally
 
         self.update_display()
 
-    def key_press(self, event):
-        """Handles keyboard input"""
-        key = event.char
-        if key in "0123456789+-*/().":
-            self.expression += key
-        elif key == "\r":  # Enter key
-            self.calculate_result()
-        elif key == "\x08":  # Backspace key
-            self.expression = self.expression[:-1]
-        self.update_display()
-
     def calculate_result(self):
         """Evaluates the expression using the Calculator module"""
         try:
+            if self.expression.count("(") > self.expression.count(")"):
+                self.expression += ")" * (self.expression.count("(") - self.expression.count(")"))
             result = eval(self.expression, {"Calculator": Calculator, "math": __import__("math")})
             self.expression = str(result)
         except Exception:
