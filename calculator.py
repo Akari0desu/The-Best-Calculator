@@ -65,25 +65,6 @@ class Calculator:
         return "Error: Cannot calculate the root of negative number"
     return math.sqrt(a)
 
-# to calculate logarithm base 10
-  def logarithm (a):
-    if a<= 0 :
-        return "Error: cannot be zero or negative"
-    return math.log(a)
-
-#to find natural log base e
-  def natural_log(a):
-    if a <= 0:
-        return "Error: cannot be zero or negative"
-    return math.log(a)
-
-#to find the cube of a number
-  def cube(a):
-    return a ** 3 
-
-#to find cube root of a number
-  def cube_root(a):
-    return a **(1/3)
 
             
 
