@@ -52,7 +52,7 @@ class CalculatorGUI:
             for col_idx, btn_text in enumerate(row):
                 button = tk.Button(
                     root, text=btn_text, font=FONT_MEDIUM, 
-                    bg=BTN_COLOR, fg=BTN_TEXT_COLOR,  # Black button with white text
+                    bg=BTN_COLOR, fg=BTN_TEXT_COLOR,
                     activebackground=BTN_HIGHLIGHT, activeforeground=BTN_TEXT_COLOR,
                     relief=tk.RAISED, bd=3, padx=10, pady=10,
                     command=lambda text=btn_text: self.on_button_click(text)
@@ -88,7 +88,7 @@ class CalculatorGUI:
             }
             self.expression += f"Calculator.{trig_map[button_text]}("
         else:
-            self.expression += button_text  # Append other numbers/symbols normally
+            self.expression += button_text
 
         self.update_display()
 
@@ -97,8 +97,19 @@ class CalculatorGUI:
         try:
             if self.expression.count("(") > self.expression.count(")"):
                 self.expression += ")" * (self.expression.count("(") - self.expression.count(")"))
+            
+            if "/0" in self.expression:
+                raise ZeroDivisionError
+            
             result = eval(self.expression, {"Calculator": Calculator, "math": __import__("math")})
+            
+            if result == "Error: Division by zero":
+                raise ZeroDivisionError
+            
             self.expression = str(result)
+        except ZeroDivisionError:
+            messagebox.showerror("Error", "Division by zero is not allowed")
+            self.expression = ""
         except Exception:
             messagebox.showerror("Error", "Invalid Calculation")
             self.expression = ""
